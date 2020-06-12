@@ -1,0 +1,37 @@
+Conteudo:
+	Projeto (Java)
+	BD (Workbench)
+	BD (Print)
+	
+Java:
+	Executar a partir da class Main
+		
+Java BD:
+	Login
+	Menu
+	CRUD da tabela piloto
+	CRUD da tabela voo
+	Consultas
+	
+BD (Tabelas que Necessitam de Criação Manual):
+	utilizador
+	piloto_has_aviao
+	aviao
+	marca
+	
+Consultas:
+	1- Consulta todas as marcas já conduzidas por um certo piloto
+		SELECT Distinct marca.Marca, marca.Lugares, marca.Autonomia FROM marca INNER JOIN (aviao INNER JOIN (piloto_has_aviao INNER JOIN piloto ON piloto_has_aviao.piloto_IdPiloto=piloto.IdPiloto) ON aviao.Matr=piloto_has_aviao.aviao_Matr) ON marca.Marca=aviao.Marca WHERE piloto.IdPiloto=? ORDER BY marca.Marca ASC
+	
+	2- Consulta todos os pilotos que realizaram voos numa certa data
+		SELECT DISTINCT piloto.* FROM piloto INNER JOIN voo ON piloto.IdPiloto=voo.IdPiloto WHERE voo.Data=? ORDER BY piloto.IdPiloto ASC
+	
+	3- Consulta todos os aviões que têm um certo número de autonomia
+		SELECT aviao.* FROM aviao INNER JOIN marca ON aviao.Marca=marca.Marca WHERE marca.Autonomia" + operacao + "? ORDER BY aviao.NomeA
+		//Comentário: (" + operacao + ") - Esta variável foi introduzida desta forma, pois foi a única forma que arranjei para fazer uma consulta com um operador dinâmico (ex: <; >; =; etc)
+	
+	4- Consulta todos os pilotos que já pilotaram aviões de todas as marcas existentes
+		SELECT piloto.* FROM piloto INNER JOIN(piloto_has_aviao INNER JOIN(aviao INNER JOIN marca ON aviao.Marca=marca.marca) ON piloto_has_aviao.aviao_Matr=aviao.Matr) ON piloto.IdPiloto=piloto_has_aviao.piloto_IdPiloto GROUP BY piloto.IdPiloto HAVING COUNT(DISTINCT(marca.Marca))=(SELECT COUNT(marca.Marca) FROM marca) 
+	
+	5- Consulta todos os voos feitos por um certo avião
+		SELECT voo.* FROM voo INNER JOIN(piloto INNER JOIN(piloto_has_aviao INNER JOIN aviao ON piloto_has_aviao.aviao_Matr=aviao.Matr) ON piloto.IdPiloto=piloto_has_aviao.piloto_IdPiloto) ON voo.IdPiloto=piloto.IdPiloto WHERE aviao.Matr=?
